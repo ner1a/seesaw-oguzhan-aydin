@@ -5,6 +5,13 @@ const rightWeightEl = document.getElementById('right-weight');
 const angleEl = document.getElementById('angle');
 const resetButton = document.getElementById('reset-button');
 
+let previewObject = document.getElementById('preview-object');
+let previewLine = document.getElementById('preview-line');
+let pivotPoint = document.getElementById('pivot-point');
+let previewDistance = document.getElementById('preview-distance');
+let clickableArea = document.getElementById('clickable-area');
+let previewTork = document.getElementById('preview-tork');
+
 const PLANK_WIDTH = 400;
 const PIVOT_CENTER = PLANK_WIDTH / 2;
 const MAX_ANGLE = 30;
@@ -12,11 +19,6 @@ const MAX_ANGLE = 30;
 let nextWeight = generateRandomWeight();
 let currentAngle = 0;
 let objects = [];
-
-let previewObject = document.getElementById('preview-object');
-let previewLine = document.getElementById('preview-line');
-let pivotPoint = document.getElementById('pivot-point');
-let previewDistance = document.getElementById('preview-distance');
 
 function generateRandomWeight() {
     return (Math.random() * (10 - 1) + 1).toFixed(1);
@@ -26,10 +28,10 @@ function getObjectSize(weight) {
     return 30 + (weight - 1) * 4;
 }
 
-plank.addEventListener('click', (e) => {
+clickableArea.addEventListener('click', (e) => {
     const weight = parseFloat(nextWeight);
 
-    const rect = plank.getBoundingClientRect();
+    const rect = clickableArea.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
 
     const obj = {
@@ -66,6 +68,8 @@ function calculate() {
         }
     });
 
+
+
     const torqueDifference = rightTorque - leftTorque;
     const targetAngle = Math.max(-MAX_ANGLE, Math.min(MAX_ANGLE, torqueDifference));
 
@@ -89,8 +93,9 @@ function createObjectElement(obj) {
         background: #764ba2;
         border-radius: 50%;
         left: ${obj.x}px;
-        top: ${-size}px;
-        transform: translateX(-50%);
+        top: -300px;
+        transform: translate(-50%,${300-size}px);
+        transition: transform 2s ease 1s;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -106,10 +111,11 @@ function createObjectElement(obj) {
     obj.element = objDiv;
 }
 
-plank.addEventListener('mousemove', (e) => {
+clickableArea.addEventListener('mousemove', (e) => {
 
-    const rect = plank.getBoundingClientRect();
+    const rect = clickableArea.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
+    
     const size = getObjectSize(parseFloat(nextWeight));
     const radius = size / 2;
 
@@ -125,20 +131,12 @@ plank.addEventListener('mousemove', (e) => {
 
     if (mouseX < PIVOT_CENTER) {
         //Sol
-        previewDistance.style.cssText = `
-        right: unset;
-        left: 50%;
-        transform = translate(-50%, -50%);
-        `;
+        previewDistance.textContent = distanceFromPivot + 'px';
         previewLine.style.left = mouseX + 'px';
         previewLine.style.width = distanceFromPivot + 'px';
     } else {
         //Sağ
-        previewDistance.style.cssText = `
-        right: 50%;
-        left: unset;
-        transform = translate(50%, -50%);
-        `;
+        previewDistance.textContent = (distanceFromPivot + 1) + 'px';
         previewLine.style.left = PIVOT_CENTER + 'px';
         previewLine.style.width = distanceFromPivot + 'px';
     }
@@ -147,11 +145,11 @@ plank.addEventListener('mousemove', (e) => {
     pivotPoint.style.opacity = '1';
 });
 
-/* plank.addEventListener('mouseleave', () => {
+clickableArea.addEventListener('mouseleave', () => {
         previewObject.style.opacity = '0';
         previewLine.style.opacity = '0';
         pivotPoint.style.opacity = '0';
-}); */
+});
 
 resetButton.addEventListener('click', () => {
     objects.forEach(obj => {

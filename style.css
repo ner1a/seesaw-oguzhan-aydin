@@ -140,5 +140,28 @@ button:hover {
 .preview-distance {
     position: absolute;
     transition: opacity 0.2s;
-    font-size: medium;
+    font-size: small;
+    font-weight: 300;
+    right: 50%;
+    left: unset;
+    transform: translateX(50%);
+    top: 15px;
+}
+
+.preview-tork {
+    position: absolute;
+    transition: opacity 0.2s;
+    font-size: small;
+    font-weight: 300;
+    right: 50%;
+    left: unset;
+    transform: translateX(50%);
+    top: 30px;
+}
+
+.clickable-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
