@@ -30,13 +30,14 @@ plank.addEventListener('click', (e) => {
     const obj = {
         weight: weight,
         size: getObjectSize(weight),
-        x: clickX
+        x: clickX,
+        element: null
     };
 
     objects.push(obj);
+    createObjectElement(obj);
     nextWeight = generateRandomWeight();
     calculate();
-    console.log(objects); // DEBUG
 });
 
 function calculate() {
@@ -62,14 +63,51 @@ function calculate() {
 
     const torqueDifference = rightTorque - leftTorque;
     const targetAngle = Math.max(-MAX_ANGLE, Math.min(MAX_ANGLE, torqueDifference));
+    
+    currentAngle = targetAngle;
+    plank.style.transform = `rotate(${currentAngle}deg)`;
 
+    angleEl.textContent = currentAngle.toFixed(1) + '°';
     leftWeightEl.textContent = leftWeight.toFixed(1) + ' kg';
     rightWeightEl.textContent = rightWeight.toFixed(1) + ' kg';
-    angleEl.textContent = targetAngle.toFixed(1) + '°';
-    plank.style.transform = `rotate(${targetAngle}deg)`;
+}
+
+function createObjectElement(obj) {
+    const size = getObjectSize(obj.weight);
+    const radius = size / 2;
+    const objDiv = document.createElement('div');
+    objDiv.className = 'object';
+    objDiv.style.cssText = `
+        position: absolute;
+        width: ${size}px;
+        height: ${size}px;
+        background: #764ba2;
+        border-radius: 50%;
+        left: ${obj.x}px;
+        top: ${-size}px;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: ${Math.max(10, size / 4)}px;
+        font-weight: 400;
+        pointer-events: none;
+    `;
+    objDiv.textContent = obj.weight + 'kg';
+    objDiv.dataset.id = obj.id;
+
+    plank.appendChild(objDiv);
+    obj.element = objDiv;
 }
 
 resetButton.addEventListener('click', () => {
+    objects.forEach(obj => {
+        if (obj.element) {
+            obj.element.remove();
+        }
+    });
+
     objects = [];
     currentAngle = 0;
 
