@@ -47,7 +47,7 @@ plank.addEventListener('click', (e) => {
 
     // deg to rad
     const theta = (currentAngle * Math.PI) / 180;
-    // distance from pivot
+    // distance from pivot on angled plank
     const localXFromCenter = dx * Math.cos(theta) + dy * Math.sin(theta);
 
     // Local X pos on plank
@@ -201,7 +201,7 @@ plank.addEventListener('mousemove', (e) => {
     pivotPoint.style.opacity = '1';
 });
 
-clickableArea.addEventListener('mouseleave', () => {
+plank.addEventListener('mouseleave', () => {
     previewObject.style.opacity = '0';
     previewLine.style.opacity = '0';
     pivotPoint.style.opacity = '0';
