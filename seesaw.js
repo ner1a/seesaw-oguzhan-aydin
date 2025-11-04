@@ -13,6 +13,11 @@ let nextWeight = generateRandomWeight();
 let currentAngle = 0;
 let objects = [];
 
+let previewObject = document.getElementById('preview-object');
+let previewLine = document.getElementById('preview-line');
+let pivotPoint = document.getElementById('pivot-point');
+let previewDistance = document.getElementById('preview-distance');
+
 function generateRandomWeight() {
     return (Math.random() * (10 - 1) + 1).toFixed(1);
 }
@@ -63,7 +68,7 @@ function calculate() {
 
     const torqueDifference = rightTorque - leftTorque;
     const targetAngle = Math.max(-MAX_ANGLE, Math.min(MAX_ANGLE, torqueDifference));
-    
+
     currentAngle = targetAngle;
     plank.style.transform = `rotate(${currentAngle}deg)`;
 
@@ -100,6 +105,53 @@ function createObjectElement(obj) {
     plank.appendChild(objDiv);
     obj.element = objDiv;
 }
+
+plank.addEventListener('mousemove', (e) => {
+
+    const rect = plank.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const size = getObjectSize(parseFloat(nextWeight));
+    const radius = size / 2;
+
+    previewObject.style.width = size + 'px';
+    previewObject.style.height = size + 'px';
+    previewObject.style.left = mouseX + 'px';
+    previewObject.style.top = (-size) + 'px';
+    previewObject.style.transform = 'translateX(-50%)';
+    previewObject.textContent = nextWeight + 'kg';
+    previewObject.style.opacity = '1';
+
+    const distanceFromPivot = Math.abs(mouseX - PIVOT_CENTER);
+
+    if (mouseX < PIVOT_CENTER) {
+        //Sol
+        previewDistance.style.cssText = `
+        right: unset;
+        left: 50%;
+        transform = translate(-50%, -50%);
+        `;
+        previewLine.style.left = mouseX + 'px';
+        previewLine.style.width = distanceFromPivot + 'px';
+    } else {
+        //Sağ
+        previewDistance.style.cssText = `
+        right: 50%;
+        left: unset;
+        transform = translate(50%, -50%);
+        `;
+        previewLine.style.left = PIVOT_CENTER + 'px';
+        previewLine.style.width = distanceFromPivot + 'px';
+    }
+
+    previewLine.style.opacity = '1';
+    pivotPoint.style.opacity = '1';
+});
+
+/* plank.addEventListener('mouseleave', () => {
+        previewObject.style.opacity = '0';
+        previewLine.style.opacity = '0';
+        pivotPoint.style.opacity = '0';
+}); */
 
 resetButton.addEventListener('click', () => {
     objects.forEach(obj => {

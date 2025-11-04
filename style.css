@@ -94,3 +94,51 @@ button:hover {
     width: 0;
     height: 20px;
 }
+
+.pivot-point {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #ff6b6b;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.preview-object {
+    position: absolute;
+    background: rgba(102, 126, 234, 0.5);
+    border: 2px dashed #667eea;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #667eea;
+    font-size: 12px;
+    font-weight: 400;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.preview-line {
+    position: absolute;
+    height: 2px;
+    background: rgba(102, 126, 234, 0.6);
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 99;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.preview-distance {
+    position: absolute;
+    transition: opacity 0.2s;
+    font-size: medium;
+}
