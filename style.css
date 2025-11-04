@@ -64,17 +64,21 @@ button:hover {
     align-items: center;
     justify-content: center;
     position: relative;
+    box-shadow: var(--box-shadow);
 }
 
 .plank {
-    width: 400px;
+    width: 396px;
+    /* 400px with border */
     height: 20px;
     background-color: #54463A;
     border: 2px solid #756449;
     border-radius: 4px;
     position: relative;
-    transform-origin: bottom center;
+    transform-origin: center center;
     z-index: 2;
+    transition: transform 1s;
+    transition-timing-function: ease-in;
 }
 
 .pivot {
@@ -84,7 +88,7 @@ button:hover {
     transform: translate(-50%, -50%);
     display: block;
     content: '';
-    border-bottom: 40px solid #756449;
+    border-bottom: 40px solid #41342a;
     border-right: 30px solid transparent;
     border-left: 30px solid transparent;
     width: 0;
