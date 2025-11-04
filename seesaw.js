@@ -90,11 +90,10 @@ function createObjectElement(obj) {
         position: absolute;
         width: ${size}px;
         height: ${size}px;
-        background: #764ba2;
         border-radius: 50%;
         left: ${obj.x}px;
         top: -300px;
-        transform: translate(-50%,${300-size}px);
+        transform: translate(-50%,${300 - size}px);
         transition: transform 2s ease 1s;
         display: flex;
         align-items: center;
@@ -104,6 +103,35 @@ function createObjectElement(obj) {
         font-weight: 400;
         pointer-events: none;
     `;
+    switch (true) {
+        case obj.weight > 9:
+            objDiv.style.backgroundColor = '#9e0142';
+            break;
+        case obj.weight > 8:
+            objDiv.style.backgroundColor = '#d53e4f';
+            break;
+        case obj.weight > 7:
+            objDiv.style.backgroundColor = '#f46d43';
+            break;
+        case obj.weight > 6:
+            objDiv.style.backgroundColor = '#fdae61';
+            break;
+        case obj.weight > 5:
+            objDiv.style.backgroundColor = '#fee08b';
+            break;
+        case obj.weight > 4:
+            objDiv.style.backgroundColor = '#e6f598';
+            break;
+        case obj.weight > 3:
+            objDiv.style.backgroundColor = '#abdda4';
+            break;
+        case obj.weight > 2:
+            objDiv.style.backgroundColor = '#66c2a5';
+            break;
+        default:
+            objDiv.style.backgroundColor = '#3288bd';
+            break;
+    }
     objDiv.textContent = obj.weight + 'kg';
     objDiv.dataset.id = obj.id;
 
@@ -112,22 +140,23 @@ function createObjectElement(obj) {
 }
 
 clickableArea.addEventListener('mousemove', (e) => {
-
     const rect = clickableArea.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
-    
+
     const size = getObjectSize(parseFloat(nextWeight));
     const radius = size / 2;
 
     previewObject.style.width = size + 'px';
     previewObject.style.height = size + 'px';
     previewObject.style.left = mouseX + 'px';
-    previewObject.style.top = (-size) + 'px';
+    previewObject.style.top = (-size - 4) + 'px';
     previewObject.style.transform = 'translateX(-50%)';
     previewObject.textContent = nextWeight + 'kg';
     previewObject.style.opacity = '1';
 
     const distanceFromPivot = Math.abs(mouseX - PIVOT_CENTER);
+    const torque = nextWeight * distanceFromPivot;
+    previewTork.textContent = 'Torque: ' + torque.toFixed(0);
 
     if (mouseX < PIVOT_CENTER) {
         //Sol
@@ -146,9 +175,9 @@ clickableArea.addEventListener('mousemove', (e) => {
 });
 
 clickableArea.addEventListener('mouseleave', () => {
-        previewObject.style.opacity = '0';
-        previewLine.style.opacity = '0';
-        pivotPoint.style.opacity = '0';
+    previewObject.style.opacity = '0';
+    previewLine.style.opacity = '0';
+    pivotPoint.style.opacity = '0';
 });
 
 resetButton.addEventListener('click', () => {
