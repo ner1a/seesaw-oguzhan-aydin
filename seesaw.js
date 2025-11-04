@@ -20,6 +20,8 @@ let nextWeight = generateRandomWeight();
 let currentAngle = 0;
 let objects = [];
 
+const STORAGE_KEY = 'seesaw_state';
+
 function generateRandomWeight() {
     return (Math.random() * (10 - 1) + 1).toFixed(1);
 }
@@ -45,6 +47,7 @@ clickableArea.addEventListener('click', (e) => {
     createObjectElement(obj);
     nextWeight = generateRandomWeight();
     calculate();
+    saveState();
 });
 
 function calculate() {
@@ -76,6 +79,7 @@ function calculate() {
     angleEl.textContent = currentAngle.toFixed(1) + '°';
     leftWeightEl.textContent = leftWeight.toFixed(1) + ' kg';
     rightWeightEl.textContent = rightWeight.toFixed(1) + ' kg';
+    saveState();
 }
 
 function createObjectElement(obj) {
@@ -195,4 +199,38 @@ resetButton.addEventListener('click', () => {
     angleEl.textContent = '0°';
     plank.style.transform = 'none';
     nextWeight = generateRandomWeight();
+    localStorage.removeItem(STORAGE_KEY);
 });
+
+function saveState() {
+    try {
+        const state = {
+            objects: objects,
+            angle: currentAngle
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+        console.error('State kaydedilemedi:', e);
+    }
+}
+
+function loadState() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            const state = JSON.parse(saved);
+            objects = state.objects || [];
+            currentAngle = state.angle || 0;
+
+            objects.forEach(obj => {
+                createObjectElement(obj);
+            });
+
+            calculate();
+        }
+    } catch (e) {
+        console.error('State yüklenemedi:', e);
+    }
+}
+
+loadState();
