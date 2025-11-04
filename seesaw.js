@@ -4,13 +4,12 @@ const leftWeightEl = document.getElementById('left-weight');
 const rightWeightEl = document.getElementById('right-weight');
 const angleEl = document.getElementById('angle');
 const resetButton = document.getElementById('reset-button');
-
-let previewObject = document.getElementById('preview-object');
-let previewLine = document.getElementById('preview-line');
-let pivotPoint = document.getElementById('pivot-point');
-let previewDistance = document.getElementById('preview-distance');
-let clickableArea = document.getElementById('clickable-area');
-let previewTork = document.getElementById('preview-tork');
+const previewObject = document.getElementById('preview-object');
+const previewLine = document.getElementById('preview-line');
+const pivotPoint = document.getElementById('pivot-point');
+const previewDistance = document.getElementById('preview-distance');
+const clickableArea = document.getElementById('clickable-area');
+const previewTork = document.getElementById('preview-tork');
 
 const PLANK_WIDTH = 400;
 const PIVOT_CENTER = PLANK_WIDTH / 2;
