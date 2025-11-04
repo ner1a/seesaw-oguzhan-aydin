@@ -30,16 +30,33 @@ function getObjectSize(weight) {
     return 30 + (weight - 1) * 4;
 }
 
-clickableArea.addEventListener('click', (e) => {
+plank.addEventListener('click', (e) => {
     const weight = parseFloat(nextWeight);
 
-    const rect = clickableArea.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
+    const rect = plank.getBoundingClientRect();
+    const pivotX = rect.left + rect.width / 2;
+    const pivotY = rect.top + rect.height / 2;
+
+    // Screen coords
+    const clickX = e.clientX;
+    const clickY = e.clientY;
+
+    // X, Y Vectors according to Pivot point
+    const dx = clickX - pivotX;
+    const dy = clickY - pivotY;
+
+    // deg to rad
+    const theta = (currentAngle * Math.PI) / 180;
+    // distance from pivot
+    const localXFromCenter = dx * Math.cos(theta) + dy * Math.sin(theta);
+
+    // Local X pos on plank
+    let localX = PIVOT_CENTER + localXFromCenter;
 
     const obj = {
         weight: weight,
         size: getObjectSize(weight),
-        x: clickX,
+        x: localX,
         element: null
     };
 
@@ -84,7 +101,6 @@ function calculate() {
 
 function createObjectElement(obj) {
     const size = getObjectSize(obj.weight);
-    const radius = size / 2;
     const objDiv = document.createElement('div');
     objDiv.className = 'object fall-in';
     objDiv.style.cssText = `
@@ -143,33 +159,40 @@ function createObjectElement(obj) {
     obj.element = objDiv;
 }
 
-clickableArea.addEventListener('mousemove', (e) => {
-    const rect = clickableArea.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
+plank.addEventListener('mousemove', (e) => {
+    const rect = plank.getBoundingClientRect();
+    const pivotX = rect.left + rect.width / 2;
+    const pivotY = rect.top + rect.height / 2;
+
+    const mouseX_screen = e.clientX;
+    const mouseY_screen = e.clientY;
+
+    const dx = mouseX_screen - pivotX;
+    const dy = mouseY_screen - pivotY;
+    const theta = (currentAngle * Math.PI) / 180;
+
+    const localXFromCenter = dx * Math.cos(theta) + dy * Math.sin(theta);
+    let localX = PIVOT_CENTER + localXFromCenter;
 
     const size = getObjectSize(parseFloat(nextWeight));
-    const radius = size / 2;
-
     previewObject.style.width = size + 'px';
     previewObject.style.height = size + 'px';
-    previewObject.style.left = mouseX + 'px';
+    previewObject.style.left = localX + 'px';
     previewObject.style.top = (-size - 4) + 'px';
     previewObject.style.transform = 'translateX(-50%)';
     previewObject.textContent = nextWeight + 'kg';
     previewObject.style.opacity = '1';
 
-    const distanceFromPivot = Math.abs(mouseX - PIVOT_CENTER);
+    const distanceFromPivot = Math.abs(localX - PIVOT_CENTER);
     const torque = nextWeight * distanceFromPivot;
     previewTork.textContent = 'Torque: ' + torque.toFixed(0);
 
-    if (mouseX < PIVOT_CENTER) {
-        //Sol
-        previewDistance.textContent = distanceFromPivot + 'px';
-        previewLine.style.left = mouseX + 'px';
+    if (localX < PIVOT_CENTER) {
+        previewDistance.textContent = Math.round(distanceFromPivot) + 'px';
+        previewLine.style.left = localX + 'px';
         previewLine.style.width = distanceFromPivot + 'px';
     } else {
-        //Sağ
-        previewDistance.textContent = (distanceFromPivot + 1) + 'px';
+        previewDistance.textContent = Math.round(distanceFromPivot) + 'px';
         previewLine.style.left = PIVOT_CENTER + 'px';
         previewLine.style.width = distanceFromPivot + 'px';
     }
