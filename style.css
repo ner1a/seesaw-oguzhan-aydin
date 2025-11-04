@@ -63,22 +63,25 @@ button:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
-.plank{
+.plank {
     width: 400px;
     height: 20px;
     background-color: #54463A;
     border: 2px solid #756449;
     border-radius: 4px;
     position: relative;
+    transform-origin: bottom center;
+    z-index: 2;
 }
 
-.plank::after{
+.pivot {
     position: absolute;
     left: 50%;
-    transform: translateX(-50%);
-    top: 0;
+    top: calc(50% + 20px);
+    transform: translate(-50%, -50%);
     display: block;
     content: '';
     border-bottom: 40px solid #756449;
