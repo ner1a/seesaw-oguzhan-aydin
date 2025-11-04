@@ -56,7 +56,6 @@ function calculate() {
     objects.forEach(obj => {
         const distanceFromPivot = obj.x - PIVOT_CENTER;
         const torque = obj.weight * Math.abs(distanceFromPivot);
-
         if (distanceFromPivot < 0) {
             // Sol
             leftTorque += torque;
@@ -68,9 +67,7 @@ function calculate() {
         }
     });
 
-
-
-    const torqueDifference = rightTorque - leftTorque;
+    const torqueDifference = (rightTorque - leftTorque) / 10;
     const targetAngle = Math.max(-MAX_ANGLE, Math.min(MAX_ANGLE, torqueDifference));
 
     currentAngle = targetAngle;
@@ -85,15 +82,15 @@ function createObjectElement(obj) {
     const size = getObjectSize(obj.weight);
     const radius = size / 2;
     const objDiv = document.createElement('div');
-    objDiv.className = 'object';
+    objDiv.className = 'object fall-in';
     objDiv.style.cssText = `
         position: absolute;
         width: ${size}px;
         height: ${size}px;
         border-radius: 50%;
         left: ${obj.x}px;
-        top: -300px;
-        transform: translate(-50%,${300 - size}px);
+        top: ${-size}px;
+        transform: translateX(-50%);
         transition: transform 2s ease 1s;
         display: flex;
         align-items: center;
@@ -115,12 +112,15 @@ function createObjectElement(obj) {
             break;
         case obj.weight > 6:
             objDiv.style.backgroundColor = '#fdae61';
+            objDiv.style.color = '#000';
             break;
         case obj.weight > 5:
             objDiv.style.backgroundColor = '#fee08b';
+            objDiv.style.color = '#000';
             break;
         case obj.weight > 4:
             objDiv.style.backgroundColor = '#e6f598';
+            objDiv.style.color = '#000';
             break;
         case obj.weight > 3:
             objDiv.style.backgroundColor = '#abdda4';

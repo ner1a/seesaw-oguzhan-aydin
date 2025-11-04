@@ -65,6 +65,7 @@ button:hover {
     justify-content: center;
     position: relative;
     box-shadow: var(--box-shadow);
+    overflow: hidden;
 }
 
 .plank {
@@ -161,4 +162,17 @@ button:hover {
     justify-content: center;
     align-items: center;
     height: 100%;
+}
+
+@keyframes fallIn {
+  from {
+    transform: translateY(-300px) translateX(-50%);
+  }
+  to {
+    transform: translateY(0) translateX(-50%);
+  }
+}
+
+.fall-in {
+  animation: fallIn 0.6s ease-out forwards;
 }
