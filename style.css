@@ -56,3 +56,34 @@ button {
 button:hover {
     background-color: rgb(226, 226, 226);
 }
+
+.seesaw-container {
+    width: 600px;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.plank{
+    width: 400px;
+    height: 20px;
+    background-color: #54463A;
+    border: 2px solid #756449;
+    border-radius: 4px;
+    position: relative;
+}
+
+.plank::after{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    display: block;
+    content: '';
+    border-bottom: 40px solid #756449;
+    border-right: 30px solid transparent;
+    border-left: 30px solid transparent;
+    width: 0;
+    height: 20px;
+}
